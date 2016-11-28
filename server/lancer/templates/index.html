@@ -1,0 +1,75 @@
+{% include 'header.html' %}
+
+<div class="container">
+
+	<div class="lancer-main">
+  
+		{% if message is defined %}
+			<div class="alert alert-{{ type }}">
+				{% autoescape false %}
+				{{ message }}
+				{% endautoescape %}
+			</div>
+		{% endif %}
+  
+		<form action="{{ path_for('add-user') }}" method="POST" class="form-inline">
+			<div class="form-group">
+				<input type="text" class="form-control" id="name" name="name" placeholder="Name" value="{{ name }}">
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" id="cardid" name="cardid" placeholder="Card ID" value="{{ cardid }}">
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" id="password" name="password" placeholder="Password" value="{{ password }}">
+			</div>
+			<button type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span></button>
+		</form>
+	
+		<h2 class="sub-header">Users</h2>
+		{% if users %}
+			<div class="table-responsive">
+				<table class="table table-striped">
+				  <thead>
+					<tr>
+					  <th>#</th>
+					  <th>Name</th>
+					  <th>Card ID</th>
+					  <th>Actions</th>
+					</tr>
+				  </thead>
+				  <tbody>
+					{% for user in users %}
+					<tr>
+					  <td>{{ user.id }}</td>
+					  <td>{{ user.name }}</td>
+					  <td>{{ user.cardid }}</td>
+					  <td>
+						<a href="{{ path_for('update-user-form', {'id': user.id}) }}">
+							<button type="button" class="btn btn-primary btn-sm pull-left">
+								<span class="glyphicon glyphicon-edit"></span>
+							</button>
+						</a>
+						<span class="pull-left">&nbsp;</span>
+						<form action="{{ path_for('delete-user', {'id': user.id}) }}" method="post" class="pull-left">
+							<input type="hidden" name="_METHOD" value="DELETE"/>
+							<button type="submit" class="btn btn-danger btn-sm">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</form>
+					  </td>
+					</tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+			</div>
+		{% else %}
+			<br />
+			<div class="alert alert-info">
+				<p>No user found.</p>
+			</div>
+		{% endif %}
+	
+	</div><!-- /.lancer-main -->
+</div><!-- /.container -->
+
+{% include 'footer.html' %}
